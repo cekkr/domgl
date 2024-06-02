@@ -10,26 +10,37 @@ document.body.appendChild(renderer.domElement);
 
 camera.position.z = 5;
 
-// Create a simple cube
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// Create a canvas element and its 2D context
+const textureCanvas = document.createElement('canvas');
+textureCanvas.width = 512;
+textureCanvas.height = 512;
+const context = textureCanvas.getContext('2d');
+
+// Initialize the texture from the canvas
+const texture = new THREE.CanvasTexture(textureCanvas);
+const material = new THREE.MeshBasicMaterial({ map: texture });
+const geometry = new THREE.PlaneGeometry(5, 5);
+const plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
 
 // Setup the worker
 const worker = new Worker('./worker.js');
 
 worker.onmessage = function (e) {
-    // Update the cube's rotation based on worker calculations
-    cube.rotation.x = e.data.rotationX;
-    cube.rotation.y = e.data.rotationY;
+    // Update the canvas based on worker calculations
+    context.clearRect(0, 0, textureCanvas.width, textureCanvas.height);
+    context.fillStyle = e.data.color;
+    context.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
+
+    // Update the texture
+    texture.needsUpdate = true;
 };
 
 // Animation loop
 function animate() {
     requestAnimationFrame(animate);
 
-    // Post a message to the worker to perform heavy computations
+    // Post a message to the worker to perform updates
     worker.postMessage({ time: performance.now() });
 
     renderer.render(scene, camera);
