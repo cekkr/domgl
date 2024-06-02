@@ -1,10 +1,8 @@
 onmessage = function (e) {
+    // Perform any worker-specific tasks
     const time = e.data.time;
 
-    // Calculate color based on time for a dynamic texture effect
-    const colorValue = Math.floor((Math.sin(time * 0.001) + 1) * 127.5);
-    const color = `rgb(${colorValue}, ${colorValue}, 255)`;
-
-    // Send the result back to the main thread
-    postMessage({ color });
+    // This example doesn't need to do anything in the worker for now
+    // Post a message back to the main thread to trigger canvas update
+    postMessage({});
 };

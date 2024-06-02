@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js with Web Worker</title>
+    <title>Three.js Plane with CanvasTexture and Web Worker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div style="position: fixed; top: -10000px;">
+        <div id="html-content">
+            <h1>Hello, World!</h1>
+            <p>This is an example of rendering HTML to a canvas.</p>
+        </div>
+    </div>
     <canvas id="canvas"></canvas>
+    <script src="./libs/html2canvas.esm.js"></script>
     <script type="module" src="main.js"></script>
 </body>
 </html>
